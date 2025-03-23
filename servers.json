@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "WURS Database",
+      "Group": "Servers",
+      "Host": "host.docker.internal",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "wurs",
+      "Password": "wurs",
+      "SSLMode": "prefer"
+    }
+  }
+}

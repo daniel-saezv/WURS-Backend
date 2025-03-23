@@ -1,0 +1,30 @@
+services:
+  wurs:
+    image: ${DOCKER_REGISTRY-}wurs
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: WURS/Dockerfile
+    container_name: wurs_webapi
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: wurs
+      POSTGRES_PASSWORD: wurs
+      POSTGRES_DB: wurs
+    ports:
+      - "5432:5432"
+    container_name: wurs_postgres_db
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    depends_on:
+    - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    container_name: wurs_pgadmin
+    volumes:
+    - ./servers.json:/pgadmin4/servers.json
