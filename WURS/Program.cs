@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using WURS.Constants;
 using WURS.Extensions;
 using WURS.Infrastructure.Contexts;
-using WURS.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -26,12 +25,7 @@ services.AddCustomOptions();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var identityContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
-
-    await identityContext.Database.MigrateAsync();
-}
+await app.AddContextsAsync();
 
 app.MapIdentityApi<IdentityUser>();
 
