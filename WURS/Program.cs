@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using WURS.Constants;
 using WURS.Extensions;
-using WURS.Infrastructure.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
