@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WURS.Constants;
 using WURS.Extensions;
-using WURS.Infrastructure;
+using WURS.Infrastructure.Contexts;
+using WURS.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -21,12 +22,15 @@ services.AddSwaggerGen();
 
 services.AddAuthorization();
 
+services.AddCustomOptions();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<IdentityContext>();
-    await context.Database.MigrateAsync();
+    var identityContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
+
+    await identityContext.Database.MigrateAsync();
 }
 
 app.MapIdentityApi<IdentityUser>();
@@ -41,8 +45,17 @@ app.UseCors(ConfigurationSections.CorsSection);
 
 app.UseHttpsRedirection();
 
+//app.MapWhen(context => context.Request.Path.Equals("/register", StringComparison.OrdinalIgnoreCase) &&
+//                       context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase),
+//            appBuilder => appBuilder.UseMiddleware<UserCreateMiddleware>());
+
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/register") && context.Request.Method.Equals("POST"),
+    appbuilder => appbuilder.UseMiddleware<UserCreateMiddleware>());
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseRouting();
 
 app.Run();

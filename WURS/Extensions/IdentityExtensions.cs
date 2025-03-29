@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WURS.Constants;
-using WURS.Infrastructure;
+using WURS.Infrastructure.Contexts;
 
 namespace WURS.Extensions;
 
@@ -9,8 +9,10 @@ public static class IdentityExtensions
 {
     public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentityApiEndpoints<IdentityUser>()
-                    .AddEntityFrameworkStores<IdentityContext>();
+        services.AddIdentityApiEndpoints<IdentityUser>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+        }).AddEntityFrameworkStores<IdentityContext>();
 
         services.AddDbContext<IdentityContext>(options =>
         {
