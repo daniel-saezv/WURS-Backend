@@ -4,10 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WURS.Infrastructure;
 
-public class IdentityContext : IdentityDbContext<IdentityUser>
+public class IdentityContext(DbContextOptions<IdentityContext> options) : IdentityDbContext<IdentityUser>(options)
 {
-    public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
-    {
-        
-    }
 }

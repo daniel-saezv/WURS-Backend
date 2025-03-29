@@ -1,42 +1,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WURS.Constants;
+using WURS.Extensions;
 using WURS.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 var services = builder.Services;
+configuration.AddEnvironmentVariables();
 
-// Configurar CORS
-services.AddCors(options =>
-{
-    options.AddPolicy("DevelopmentCorsPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-
-    options.AddPolicy("ProductionCorsPolicy", builder =>
-    {
-        builder.WithOrigins("https://example.com", "https://anotherexample.com") // Agrega los orígenes permitidos
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
-
-services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<IdentityContext>();
-
-// Add services to the container.
+// CORS
+services.AddCorsPolicy(configuration);
 
 //Identity
-services.AddDbContext<IdentityContext>(options =>
-{
-    var connString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connString);
-});
+services.AddIdentity(configuration);
 
 services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
@@ -57,14 +36,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors("DevelopmentCorsPolicy");
 }
-else
-{
-    app.UseCors("ProductionCorsPolicy");
-}
+app.UseCors(ConfigurationSections.CorsSection);
 
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
