@@ -45,12 +45,7 @@ app.UseCors(ConfigurationSections.CorsSection);
 
 app.UseHttpsRedirection();
 
-//app.MapWhen(context => context.Request.Path.Equals("/register", StringComparison.OrdinalIgnoreCase) &&
-//                       context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase),
-//            appBuilder => appBuilder.UseMiddleware<UserCreateMiddleware>());
-
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/register") && context.Request.Method.Equals("POST"),
-    appbuilder => appbuilder.UseMiddleware<UserCreateMiddleware>());
+app.UseCustomMiddlewares();
 
 app.UseAuthorization();
 
