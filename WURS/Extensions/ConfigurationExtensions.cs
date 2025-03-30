@@ -19,7 +19,8 @@ public static class ConfigurationExtensions
 
     public static IServiceCollection AddCustomOptions(this IServiceCollection services)
     {
-        services.AddOptions<UserCreateOptions>("UserCreateOptions");
+        services.AddOptions<DefaultCorsPolicy>(DefaultCorsPolicy.SectionName)
+            .AddOptions<UserCreateOptions>(UserCreateOptions.SectionName);
 
         return services;
     }

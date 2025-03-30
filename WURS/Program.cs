@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using WURS.Constants;
+using WURS.Business.Configuration.Models;
 using WURS.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(ConfigurationSections.CorsSection)
+app.UseCors(DefaultCorsPolicy.SectionName)
     .UseHttpsRedirection()
     .UseCustomMiddlewares()
     .UseAuthorization();

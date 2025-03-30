@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using WURS.Constants;
+﻿using WURS.Business.Configuration.Models;
 
 namespace WURS.Extensions;
 
@@ -7,17 +6,15 @@ public static class CorsExtensions
 {
     public static IServiceCollection AddCorsPolicy(this IServiceCollection services, IConfiguration config)
     {
-        var allowedOrigins = config.GetRequiredValue<string[]>("Cors:AllowedOrigins");
-        var allowedMethods = config.GetRequiredValue<string[]>("Cors:AllowedMethods");
-        var allowedHeaders = config.GetRequiredValue<string[]>("Cors:AllowedHeaders");
+        var policy = config.GetRequiredValue<DefaultCorsPolicy>(DefaultCorsPolicy.SectionName);
 
         return services.AddCors(options =>
         {
-            options.AddPolicy(ConfigurationSections.CorsSection, builder =>
+            options.AddPolicy(DefaultCorsPolicy.SectionName, builder =>
             {
-                builder.WithOrigins(allowedOrigins)
-                       .WithMethods(allowedMethods)
-                       .WithHeaders(allowedHeaders);
+                builder.WithOrigins(policy.AllowedOrigins)
+                       .WithMethods(policy.AllowedMethods)
+                       .WithHeaders(policy.AllowedHeaders);
             });
         });
     }
