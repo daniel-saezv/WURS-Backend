@@ -19,7 +19,19 @@ public static class ConfigurationExtensions
 
     public static IServiceCollection AddCustomOptions(this IServiceCollection services)
     {
-        services.AddOptions<UserCreateOptions>().BindConfiguration("UserCreateOptions").ValidateDataAnnotations().ValidateOnStart();
+        services.AddOptions<UserCreateOptions>("UserCreateOptions");
+
+        return services;
+    }
+
+    private static IServiceCollection AddOptions<TOptions>(
+        this IServiceCollection services,
+        string configKey) where TOptions : class
+    {
+        services.AddOptions<TOptions>()
+           .BindConfiguration(configKey)
+           .ValidateDataAnnotations()
+           .ValidateOnStart();
 
         return services;
     }

@@ -7,19 +7,13 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 configuration.AddEnvironmentVariables();
 
-// CORS
-services.AddCorsPolicy(configuration);
-
-//Identity
-services.AddIdentity(configuration);
-
-services.AddControllers();
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
-
-services.AddAuthorization();
-
-services.AddCustomOptions();
+services.AddCorsPolicy(configuration)
+    .AddIdentity(configuration)
+    .AddSwaggerGen()
+    .AddAuthorization()
+    .AddCustomOptions()
+    .AddEndpointsApiExplorer()
+    .AddControllers();
 
 var app = builder.Build();
 
@@ -33,16 +27,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(ConfigurationSections.CorsSection);
-
-app.UseHttpsRedirection();
-
-app.UseCustomMiddlewares();
-
-app.UseAuthorization();
+app.UseCors(ConfigurationSections.CorsSection)
+    .UseHttpsRedirection()
+    .UseCustomMiddlewares()
+    .UseAuthorization();
 
 app.MapControllers();
-
-app.UseRouting();
 
 app.Run();
