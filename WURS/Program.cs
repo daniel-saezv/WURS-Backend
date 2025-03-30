@@ -11,7 +11,7 @@ services.AddCorsPolicy(configuration)
     .AddIdentity(configuration)
     .AddSwaggerGen()
     .AddAuthorization()
-    .AddCustomOptions()
+    .AddOptionsBinding()
     .AddEndpointsApiExplorer()
     .AddControllers();
 
