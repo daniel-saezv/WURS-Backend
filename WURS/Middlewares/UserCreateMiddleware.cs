@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
+using System.Text;
 using WURS.Business.Configuration.Models;
 
 namespace WURS.Middlewares;
@@ -20,5 +22,14 @@ public class UserCreateMiddleware(IOptions<UserCreateOptions> options, RequestDe
         }
 
         await _next(context);
+    }
+
+    private bool IsValidSecret(string providedSecret)
+    {
+        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_options.Secret));
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(providedSecret));
+        var providedHash = Convert.FromBase64String(providedSecret);
+
+        return computedHash.SequenceEqual(providedHash);
     }
 }
