@@ -3,6 +3,10 @@ using WURS.Business.Configuration.Models;
 using WURS.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.AddServerHeader = false;
+});
 var configuration = builder.Configuration;
 var services = builder.Services;
 configuration.AddEnvironmentVariables();
