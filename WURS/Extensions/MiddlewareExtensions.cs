@@ -8,6 +8,8 @@ public static class MiddlewareExtensions
     {
         app.UseWhen(context => context.Request.Path.StartsWithSegments("/register") && context.Request.Method.Equals("POST"),
             appbuilder => appbuilder.UseMiddleware<UserCreateMiddleware>());
+        app.UseWhen(context => context.Request.Path.StartsWithSegments("/login") && context.Request.Method.Equals("POST"),
+        appbuilder => appbuilder.UseMiddleware<LoginMiddleware>());
 
         return app;
     }
