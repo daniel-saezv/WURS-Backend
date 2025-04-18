@@ -14,6 +14,16 @@ public static class IdentityExtensions
             options.User.RequireUniqueEmail = true;
         }).AddEntityFrameworkStores<IdentityContext>();
 
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.Name = "WURS.Identity";
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SameSite = SameSiteMode.Strict;
+            options.ExpireTimeSpan = TimeSpan.FromDays(30);
+            options.SlidingExpiration = true;
+        });
+
         services.AddDbContext<IdentityContext>(options =>
         {
             var connString = configuration.GetConnectionString(ConfigurationSections.DefaultDbConnection);
