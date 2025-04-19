@@ -20,7 +20,8 @@ public static class ConfigurationExtensions
     public static IServiceCollection AddOptionsBinding(this IServiceCollection services)
     {
         services.AddOptions<DefaultCorsPolicy>(DefaultCorsPolicy.SectionName)
-            .AddOptions<UserCreateOptions>(UserCreateOptions.SectionName);
+                .AddOptions<UserCreateOptions>(UserCreateOptions.SectionName)
+                .AddOptions<CookieAuthOptions>(CookieAuthOptions.SectionName);
 
         return services;
     }
